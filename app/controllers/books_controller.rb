@@ -9,13 +9,14 @@ class BooksController < ApplicationController
   def show
     @book_new = Book.new
     @book = Book.find(params[:id])
+    @post_comment = PostComment.new
   end
 
   def create
     @book = Book.new(book_params)
     @book.user_id = current_user.id
+    # 誰が投稿を行ったかを知るため
     if @book.save
-
       redirect_to book_path(@book), notice: 'successfully!'
     else
       @books = Book.all

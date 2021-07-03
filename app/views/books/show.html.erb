@@ -23,9 +23,56 @@
               <td><%= link_to "Edit", edit_book_path(@book), class: 'btn btn-sm btn-success' %></td>
               <td><%= link_to "Destroy", book_path(@book), class: 'btn btn-sm btn-danger', method: :delete, "data-confirm" => "本当に削除しますか？" %></td>
             <% end %>
+
+            <td>
+            <% if @book.favorited_by?(current_user) %>
+            <!--投稿画像に付けられた「いいね」に、自分（ログインしているユーザ）が含まれているかをfavorited_by?メソッドで判定しています。-->
+              <p>
+                <%= link_to book_favorites_path(@book), method: :delete do %>
+                  ♥<%= @book.favorites.count %> いいね
+                <% end %>
+              </p>
+              <% else %>
+              <p>
+                <%= link_to book_favorites_path(@book), method: :post do %>
+                  ♡<%= @book.favorites.count %> いいね
+                <% end %>
+              </p>
+            <% end %>
+            </td>
+
+            <td>
+              <p>コメント数：<%= @book.post_comments.count %></p>
+            </td>
           </tr>
         </tbody>
       </table>
+
+      <div class="comments">
+            <% @book.post_comments.each do |post_comment| %>
+            <!--複数データがあるため１つずつデータを取り出せる-->
+              <%= attachment_image_tag post_comment.user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
+              <%= post_comment.user.name %>
+              <%= post_comment.comment %>
+            <% end %>
+            </div>
+            <div class="new-comment">
+            <%= form_with(model:[@book, @post_comment], local: true) do |f| %>
+            <!--form_withに対して、[@book,@post_comment]のように、配列でインスタンス変数を2つ指定している点に注意してください。-->
+            <!--コメントは、bookに結びついたpost_commentにあるため、2つ用意する必要があります。-->
+            <!--post_commentをcreateするためのリクエストは、ルーティングもネスト（親子関係）しているため、上記2つの情報が必要になります。-->
+              <%= f.text_area :comment, rows:'5',placeholder: "コメントをここに" %>
+              <%= f.submit "送信" %>
+            <% end %>
+
+            <% if @post_comment.user == current_user %>
+              <div class="comment-delete">
+                <%= link_to "削除", book_post_comment_path(post_comment.book, post_comment), method: :delete %>
+              </div>
+              <% end %>
+
+            </div>
+
     </div>
   </div>
 </div>
