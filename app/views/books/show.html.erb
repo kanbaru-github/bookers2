@@ -12,6 +12,7 @@
       <h2>Book detail</h2>
       <table class="table">
         <tbody>
+        <% @books.each do |book| %>
           <tr>
             <td><%= link_to user_path(@book.user) do %>
               <%= attachment_image_tag @book.user, :profile_image, :fill, 40, 40, fallback: "no_image.jpg" %><br>
@@ -42,8 +43,9 @@
             </td>
 
             <td>
-              <p>コメント数：<%= @book.post_comments.count %></p>
+              <p>コメント数：<%= book.post_comments.count %></p>
             </td>
+
           </tr>
         </tbody>
       </table>
@@ -54,9 +56,16 @@
               <%= attachment_image_tag post_comment.user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
               <%= post_comment.user.name %>
               <%= post_comment.comment %>
+
+              <% if post_comment.user == current_user %>
+              <div class="comment-delete">
+                <%= link_to "削除", book_post_comment_path(post_comment.book, post_comment), method: :delete %>
+              </div>
+              <% end %>
+
             <% end %>
-            </div>
-            <div class="new-comment">
+          </div>
+          <div class="new-comment">
             <%= form_with(model:[@book, @post_comment], local: true) do |f| %>
             <!--form_withに対して、[@book,@post_comment]のように、配列でインスタンス変数を2つ指定している点に注意してください。-->
             <!--コメントは、bookに結びついたpost_commentにあるため、2つ用意する必要があります。-->
@@ -71,7 +80,7 @@
               </div>
               <% end %>
 
-            </div>
+          </div>
 
     </div>
   </div>
