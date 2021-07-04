@@ -8,7 +8,11 @@ Rails.application.routes.draw do
 
  get'home/about' => 'homes#about'
 
- resources :users, only: [:show, :edit, :update, :create, :index]
+ resources :users, only: [:show, :edit, :update, :create, :index] do
+  get'relationships/follower' => 'relationships#follower'
+ # 左側がURL 右側がアクション
+ get'relationships/followed' => 'relationships#followed'
+ end
 
  resources :books, only: [:create, :index, :show, :destroy, :edit, :update] do
    resource :favorites, only: [:create, :destroy]
@@ -20,5 +24,8 @@ Rails.application.routes.draw do
  # 親のresourcesで指定したコントローラ名に、子のresourcesで指定したコントローラ名が続くURLが生成されるのが確認できます。
    resources :post_comments, only: [:create, :destroy]
  end
+
+ post 'follow/:id' => 'relationships#follow', as: 'follow'
+ post 'unfollow/:id' => 'relationships#unfollow', as: 'unfollow'
 
 end

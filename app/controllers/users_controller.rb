@@ -29,6 +29,12 @@ class UsersController < ApplicationController
     @book = Book.new
   end
 
+  def follower
+  end
+
+  def followed
+  end
+
   private
 
   def user_params
