@@ -1,5 +1,8 @@
 class BooksController < ApplicationController
 
+  before_action :authenticate_user!
+  before_action :ensure_correct_user, only: [:edit, :update, :destroy]
+
   def index
     @books = Book.all
     @book = Book.new
@@ -7,10 +10,11 @@ class BooksController < ApplicationController
   end
 
   def show
-    @book_new = Book.new
-    @books = Book.all
+    # @book_new = Book.new
     @book = Book.find(params[:id])
     @post_comment = PostComment.new
+    # @post_comments = @book.post_comments.order(created_at: :desc)
+    #新着順で表示
   end
 
   def create
@@ -18,7 +22,7 @@ class BooksController < ApplicationController
     @book.user_id = current_user.id
     # 誰が投稿を行ったかを知るため
     if @book.save
-      redirect_to book_path(@book), notice: 'successfully!'
+      redirect_to book_path(@book), notice: 'Created book successfully.'
     else
       @books = Book.all
       @user = current_user
@@ -36,7 +40,7 @@ class BooksController < ApplicationController
   def update
     @book = Book.find(params[:id])
     if @book.update(book_params)
-      redirect_to book_path(@book), notice: 'successfully!'
+      redirect_to book_path(@book), notice: 'Updated book successfully.'
     else
       render :edit
     end
@@ -49,8 +53,16 @@ class BooksController < ApplicationController
   end
 
   private
+
   def book_params
     params.require(:book).permit(:title, :body)
+  end
+
+  def ensure_correct_user
+    @book = Book.find(params[:id])
+    unless @book.user == current_user
+      redirect_to books_path
+    end
   end
 
 end

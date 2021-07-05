@@ -1,64 +1,19 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <title>Bookers2</title>
+    <title>Bookers</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
   <body>
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-        <%= link_to "Bookers", root_path, class: 'navbar-brand' %>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ml-auto">
-              <% if user_signed_in? %>
-                <%= link_to "Home", user_path(current_user), class: 'fas fa-home nav-link text-light' %>
-                <%= link_to "Users", users_path, class: 'fas fa-users nav-link text-light' %>
-                <%= link_to "Books", books_path, class: 'fas fa-book-open nav-link text-light' %>
-                <%= link_to "logout", destroy_user_session_path, method: :delete, class: 'fas fa-sign-out-alt nav-link text-light' %>
-              <% else %>
-                <%= link_to "Home", root_path, class: 'fas fa-home nav-link text-light' %>
-                <%= link_to "About", home_about_path, class: 'fas fa-link nav-link text-light' %>
-                <%= link_to "sign up", new_user_registration_path, class: 'fas fa-user-plus nav-link text-light' %>
-                <%= link_to "login", new_user_session_path, class: 'fas fa-sign-in-alt nav-link text-light' %>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <div class="search-form">
-        <% if user_signed_in? %>
-        <%= form_with url: search_path, method: :get, local: true do |f| %>
-          <%= f.text_field :keyword %>
-          <%= f.select :model, [["User", "user"], ["Book", "book"]], include_blank: "選択して下さい" %>
-          <!--select :modelは左側がモデル、右側がパラメーターとして送られる-->
-          <%= f.select :method, [["完全一致", "完全一致"], ["前方一致", "前方一致"], ["後方一致", "後方一致"], ["部分一致", "部分一致"]], include_blank: "選択して下さい" %>
-          <%= f.submit "検索" %>
-        <% end %>
-        <% end %>
-      </div>
-    </header>
-
-    <%= yield %>
-
-    <footer>
-      <div class="container mt-5">
-        <div class="row">
-          <div class="mx-auto">
-            <p>CopyRight Infratop.inc</p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <%= render 'layouts/header' %>
+      <main>
+        <p id="notice"><%= notice %></p>
+        <%= yield %>
+      </main>
+    <%= render 'layouts/footer' %>
   </body>
-
 </html>

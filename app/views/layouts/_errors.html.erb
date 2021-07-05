@@ -1,0 +1,13 @@
+<% if obj.errors.any? %>
+  <div id="error_explanation">
+    <h3><%= pluralize(obj.errors.count, "error") %> prohibited this obj from being saved:</h3>
+    <!--pluralizeヘルパー："error"が２つ以上の場合複数化-->
+    <ul>
+      <% obj.errors.full_messages.each do |message| %>
+      <!--全てのエラーメッセージを配列で取得-->
+      <!--複数のメッセージが格納されていることもあるので、全て表示するには each でループ処理-->
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

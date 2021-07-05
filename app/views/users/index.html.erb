@@ -1,39 +1,14 @@
-<%= flash[:notice]%>
-
-<div class="container px-5 px-sm-0">
-<div class="row">
-<div class="col-md-3">
-
-<%= render 'users/list', user: @user, book: @book %>
-
-</div>
-<div class="col-md-8 offset-md-1">
-  <h2>Users</h2>
-  <table class="table table-hover table-inverse">
-    <thead>
-      <tr>
-        <th>image</th>
-        <th>name</th>
-        <th colspan="3"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @users.each do |user| %>
-      <tr>
-        <th><%= attachment_image_tag user, :profile_image, :fill, 40, 40, fallback: "no_image.jpg" %></th>
-        <th><%= user.name %></th>
-        <th><%= "フォロー数: #{@user.follower.count}" %></th>
-        <th><%= "フォロワー数: #{@user.followed.count}" %></th>
-        <th>
-        <% if current_user.following?(user) %>
-          <%= link_to 'フォロー外す', unfollow_path(user.id), method: :POST %>
-        <% else %>
-          <%= link_to 'フォローする', follow_path(user.id), method: :POST %>
-        <% end %>
-        </th>
-        <th><%= link_to "Show", user_path(user[:id]) %></th>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class='container px-5 px-sm-0'>
+  <div class='row'>
+    <div class='col-md-3'>
+      <h2>User info</h2>
+      <%= render 'info', user: current_user %>
+      <h2 class="mt-3">New book</h2>
+      <%= render 'books/form', book: @book %>
+    </div>
+    <div class='col-md-8 offset-md-1'>
+      <h2>Users</h2>
+      <%= render 'index',users: @users %>
+    </div>
+  </div>
 </div>
