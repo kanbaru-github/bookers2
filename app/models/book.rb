@@ -1,5 +1,17 @@
 class Book < ApplicationRecord
 
+  def self.search_for(keyword, method)
+    if method == '完全一致'
+      Book.where(title: keyword)
+    elsif method == '前方一致'
+      Book.where('title LIKE ?', keyword + '%')
+    elsif method == '後方一致'
+      Book.where('title LIKE ?', '%' + keyword)
+    else
+      Book.where('title LIKE ?', '%' + keyword + '%')
+    end
+  end
+
   belongs_to :user
 
   has_many :favorites, dependent: :destroy

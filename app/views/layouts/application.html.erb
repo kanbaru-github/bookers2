@@ -35,6 +35,17 @@
           </div>
         </div>
       </nav>
+      <div class="search-form">
+        <% if user_signed_in? %>
+        <%= form_with url: search_path, method: :get, local: true do |f| %>
+          <%= f.text_field :keyword %>
+          <%= f.select :model, [["User", "user"], ["Book", "book"]], include_blank: "選択して下さい" %>
+          <!--select :modelは左側がモデル、右側がパラメーターとして送られる-->
+          <%= f.select :method, [["完全一致", "完全一致"], ["前方一致", "前方一致"], ["後方一致", "後方一致"], ["部分一致", "部分一致"]], include_blank: "選択して下さい" %>
+          <%= f.submit "検索" %>
+        <% end %>
+        <% end %>
+      </div>
     </header>
 
     <%= yield %>

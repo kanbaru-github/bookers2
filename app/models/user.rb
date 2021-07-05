@@ -1,8 +1,19 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  def self.search_for(keyword, method)
+    if method == '完全一致'
+      User.where(name: keyword)
+    elsif method == '前方一致'
+      User.where('name LIKE ?', keyword + '%')
+    elsif method == '後方一致'
+      User.where('name LIKE ?', '%' + keyword)
+    else
+      User.where('name LIKE ?', '%' + keyword + '%')
+    end
+  end
 
   has_many :books, dependent: :destroy
 
@@ -39,6 +50,6 @@ class User < ApplicationRecord
      follower_user.include?(user)
     end
 
-  attachment :profile_image
+  attachment :profile_image 
 
 end

@@ -1,0 +1,11 @@
+<% if @model == 'user' %>
+  <h1>Users search for "<%= @keyword %>"</h1>
+
+  <%= render 'users/search', users: @records %>
+
+<% elsif @model == 'book' %>
+  <h1>Books search for "<%= @keyword %>"</h1>
+
+  <%= render 'books/search', books: @records %>
+
+<% end %>
