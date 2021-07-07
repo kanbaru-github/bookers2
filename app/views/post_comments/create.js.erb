@@ -2,3 +2,4 @@ $("#book_<%= @book.id %> .comments-count").html("コメント数: <%= @book.post
 $(".post_comments").html("<%= j(render 'post_comments/index', book: @book) %>");
 $("#post_comment_comment").val("");
 <!--.val()は、対象のセレクタのvalueをカッコ内のものに書き換えます。-->
+<!--.val("")とすることで、コメントフォームをまっさらにする-->

@@ -32,6 +32,7 @@ class User < ApplicationRecord
   has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
   # relaitonshipsの「逆方向」という意味
   # class_nameで「reverse_of_relationshipsではなくrelationsipモデルの事だよ」と設定
+  # foreign_key指定により、relationshipsテーブルのどのカラムを参照するのかを指定します。
   # 自分がフォローする（与フォロー）側の関係性
   has_many :relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
   # 被フォロー関係を通じて参照→自分をフォローしている人
@@ -50,11 +51,13 @@ class User < ApplicationRecord
   # ユーザーのフォローを外す
   def unfollow(user_id)
     relationships.find_by(followed_id: user_id).destroy
+    # find_by返ってくる結果は、最初にヒットした1件のみ
   end
 
   # フォロー確認を行う
   def following?(user)
     followings.include?(user)
+    # nclude?は対象の配列に引数のものが含まれていればtrue、含まれていなければfalseを返します。
   end
 
 end
