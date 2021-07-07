@@ -25,6 +25,7 @@ class Book < ApplicationRecord
 
   validates :title, presence: true
   validates :body, presence: true, length: { maximum: 200 }
+  # lengthとは属性の値の長さを検証しています。今回は文字数
 
   def favorited_by?(user)
     favorites.where(user_id: user.id).exists?

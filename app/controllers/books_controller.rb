@@ -1,12 +1,14 @@
 class BooksController < ApplicationController
 
   before_action :authenticate_user!
+  # これを記述することで認証ユーザーのみ各アクションを実行するようになります。
   before_action :ensure_correct_user, only: [:edit, :update, :destroy]
+  # 正しいユーザーかを確かめるという意味
 
   def index
     @books = Book.all
     @book = Book.new
-    @user = current_user
+    # @user = current_user
   end
 
   def show
@@ -25,21 +27,18 @@ class BooksController < ApplicationController
       redirect_to book_path(@book), notice: 'Created book successfully.'
     else
       @books = Book.all
-      @user = current_user
+      # @user = current_user
       render :index
     end
   end
 
   def edit
-    @book = Book.find(params[:id])
-    if @book.user.id != current_user.id
-      redirect_to books_path
-    end
   end
+  # ストロングパラメーターで定義済み
 
   def update
-    @book = Book.find(params[:id])
     if @book.update(book_params)
+      # ストロングパラメーターから送られてきた値を使う
       redirect_to book_path(@book), notice: 'Updated book successfully.'
     else
       render :edit
@@ -47,12 +46,12 @@ class BooksController < ApplicationController
   end
 
   def destroy
-     book = Book.find(params[:id])
-     book.destroy
+     @book.destroy
      redirect_to books_path
   end
 
   private
+  # このストロングパラメーターはここのclassでしか参照されない
 
   def book_params
     params.require(:book).permit(:title, :body)
@@ -60,9 +59,12 @@ class BooksController < ApplicationController
 
   def ensure_correct_user
     @book = Book.find(params[:id])
+    # ここで定義しているのでedit,update,destroyには定義は不要
     unless @book.user == current_user
+      # if !=と同じ
       redirect_to books_path
     end
   end
+  # edit,update,destroyでのensure_current_userを定義している
 
 end

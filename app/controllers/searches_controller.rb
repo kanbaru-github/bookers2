@@ -1,4 +1,4 @@
-class SearchController < ApplicationController
+class SearchesController < ApplicationController
 
 before_action :authenticate_user!
 # ログイン済ユーザーのみにアクセスを許可する

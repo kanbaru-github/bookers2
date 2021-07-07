@@ -1,35 +1,34 @@
 class UsersController < ApplicationController
 
   before_action :authenticate_user!
+  # ログイン認証されていなければ、ログイン画面へリダイレクトする
   before_action :ensure_correct_user, only: [:edit, :update]
+
+  def index
+    @users = User.all
+    # @user = current_user
+    @book = Book.new
+  end
+
 
   def show
     @user = User.find(params[:id])
-    @book = Book.new
     @books = @user.books
+    @book = Book.new
     # モデル名.where(カラム名: 条件) (例)@books = Book.where(user_id: @user.id)でも可能
   end
 
   def edit
-    @user = User.find(params[:id])
-    if @user.id != current_user.id
-      redirect_to user_path(current_user)
-    end
   end
+  # ストロングパラメーターで定義済み
 
   def update
-    @user = User.find(params[:id])
     if @user.update(user_params)
+      # ストロングパラメーターから受け取る
       redirect_to user_path(@user), notice: 'Updated user successfully.'
     else
       render :edit
     end
-  end
-
-  def index
-    @users = User.all
-    @user = current_user
-    @book = Book.new
   end
 
   def follower

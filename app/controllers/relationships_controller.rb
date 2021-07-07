@@ -1,26 +1,27 @@
 class RelationshipsController < ApplicationController
 
-  def follow
-    current_user.follow(params[:id])
-    redirect_back(fallback_location: root_path)
+  before_action :authenticate_user!
+  # 認証ユーザーのみにアクセスを許可する
+
+	def create
+	  current_user.follow(params[:user_id])
+		redirect_to request.referer
+		# 遷移前のページのURL取得
+	end
+
+  def destroy
+		current_user.unfollow(params[:user_id])
+		redirect_to request.referer
+	end
+
+	def followings
+		user = User.find(params[:user_id])
+		@users = user.followings
   end
 
-  def unfollow
-    current_user.unfollow(params[:id])
-    redirect_back(fallback_location: root_path)
-  end
-
-  def follower
-    @user = User.find(params[:user_id])
-    # params[:id]はURLからidを取ってくる。:user_idはrails routesより
-    @users = @user.follower_user
-
-  end
-
-  def followed
-    @user = User.find(params[:user_id])
-    # params[:id]はURLからidを取ってくる。:user_idはrails routesより
-    @users = @user.followed_user
+	def followers
+		user = User.find(params[:user_id])
+		@users = user.followers
   end
 
 end

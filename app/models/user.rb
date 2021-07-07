@@ -17,6 +17,8 @@ class User < ApplicationRecord
 
   has_many :books, dependent: :destroy
 
+  attachment :profile_image
+
   validates :name, presence: true, uniqueness:true, length: { minimum: 2, maximum: 20 }
   validates :introduction, length: { maximum: 50 }
 
@@ -26,30 +28,33 @@ class User < ApplicationRecord
   # 「1」のデータが削除された場合、関連する「N」のデータも削除される設定です。
   # Userのデータが削除されたとき、そのUserが投稿したコメントデータも一緒に削除されます。
 
-  # foreign_key（FK）には、@user.xxxとした際に「@user.idがfollower_idなのかfollowed_idなのか」を指定します。
-  has_many :follower, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
-  has_many :followed, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
-  # @user.booksのように、@user.yyyで、
-  # そのユーザがフォローしている人orフォローされている人の一覧を出したい
-  has_many :followed_user, through: :followed, source: :follower  # 自分をフォローしている人(自分がフォローされている人)
-  has_many :follower_user, through: :follower, source: :followed  # 自分がフォローしている人
-  # sourceは関連先モデル名を指定します。
-  # フォローする人(follower)は中間テーブル(Relationshipのfollower)を通じて(through)、フォローされる人(followed)と紐づく
-  # フォローされる人(followed) は中間テーブル(Relationshipのfollowed)を通じて(through)、 フォローする人(follower) と紐づく
-  # ユーザーをフォローする
-    def follow(user_id)
-     follower.create(followed_id: user_id)
-    #  アソシエーションを利用
-    end
-    # ユーザーのフォローを外す
-    def unfollow(user_id)
-     follower.find_by(followed_id: user_id).destroy
-    end
-    # フォロー確認をおこなう
-    def following?(user)
-     follower_user.include?(user)
-    end
+  # 自分がフォローされる（被フォロー）側の関係性
+  has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+  # relaitonshipsの「逆方向」という意味
+  # class_nameで「reverse_of_relationshipsではなくrelationsipモデルの事だよ」と設定
+  # 自分がフォローする（与フォロー）側の関係性
+  has_many :relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
+  # 被フォロー関係を通じて参照→自分をフォローしている人
+  has_many :followers, through: :reverse_of_relationships, source: :follower
+  # throughは「中間テーブルはrelationships_of_relationshipsだよ」って設定
+  # source:followは「relationships_of_relationshipsテーブルのfollow_idを参考にして、followersモデルにアクセスしてね」という意味
+  # 与フォロー関係を通じて参照→自分がフォローしている人
+  has_many :followings, through: :relationships, source: :followed
 
-  attachment :profile_image 
+  # Userモデルにメソッドを記述
+   # ユーザーをフォローする
+  def follow(user_id)
+    relationships.create(followed_id: user_id)
+  end
+
+  # ユーザーのフォローを外す
+  def unfollow(user_id)
+    relationships.find_by(followed_id: user_id).destroy
+  end
+
+  # フォロー確認を行う
+  def following?(user)
+    followings.include?(user)
+  end
 
 end
