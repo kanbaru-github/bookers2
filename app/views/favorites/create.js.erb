@@ -1,4 +1,4 @@
 $("#book_<%= @book.id %> .favorite-btn").html("<%= j(render 'favorites/favorite-btn', book: @book) %>");
 <!--基本書式は$( セレクタ ).メソッド ( パラメータ );-->
 <!--.html()は、対象のセレクタの子要素（内容）をカッコ内のものに変更させます。-->
-j()はescape_javascript()の省略形になります。js.erbファイルで部分テンプレートを呼び出す際に必要になります。
+<!--j()はescape_javascript()の省略形になります。js.erbファイルで部分テンプレートを呼び出す際に必要になります。-->
