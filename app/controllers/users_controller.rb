@@ -16,6 +16,10 @@ class UsersController < ApplicationController
     @books = @user.books
     @book = Book.new
     # モデル名.where(カラム名: 条件) (例)@books = Book.where(user_id: @user.id)でも可能
+    @today_book = @books.created_today
+    @yesterday_book = @books.created_this_week
+    @this_week_book = @books.created_this_week
+    @last_week_book = @books.created_last_week
   end
 
   def edit
