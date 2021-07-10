@@ -135,10 +135,15 @@
           scales: {
             // グラフ軸の詳細（最大値・最小値・刻み幅など）
             yAxes: [{
+              // y軸の設定
               ticks: {
+                // 項目を設定
                 suggestedMax: 10,
+                // 軸の最大値
                 suggestedMin: 0,
+                // 軸の最大値
                 stepSize: 1,
+                // 軸の刻み幅
                 callback: function(value, index, values){
                   // 軸のラベル
                   return  value
@@ -151,3 +156,16 @@
       });
     });
   </script>
+
+<%= form_with url: user_search_path(@user), method: :get do |f| %>
+  <%= f.date_field :created_at %>
+  <!--年、月、日等のテキストフィールドが１つにまとまっており、カレンダー入力ができるようになっている-->
+  <!--:created_at:作成日時を記録するカラム-->
+  <%= f.submit '検索', class: 'btn btn-primary'  %>
+<% end %>
+<div id="search_result">
+  <% if @search_book.present? %>
+  <!--存在する場合-->
+    <%= render 'search', search_book: @search_book %>
+  <% end %>
+</div>

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   	get 'followings', to: 'relationships#followings', as: 'followings'
   	# 左側がURL 右側がcontroller#action
   	get 'followers', to:  'relationships#followers', as: 'followers'
+  	get 'search', to: 'users#search'
  end
 
  resources :books, only: [:create, :index, :show, :destroy, :edit, :update] do
