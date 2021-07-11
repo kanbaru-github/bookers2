@@ -6,17 +6,19 @@ class BooksController < ApplicationController
   # 正しいユーザーかを確かめるという意味
 
   def index
-    @books = Book.all
+    to  = Time.current.at_end_of_day
+    from  = (to - 6.day).at_beginning_of_day
+    @books = Book.includes(:favorited_users).
+      sort {|a,b|
+        b.favorited_users.includes(:favorites).where(created_at: from...to).size <=>
+        a.favorited_users.includes(:favorites).where(created_at: from...to).size
+      }
     @book = Book.new
-    # @user = current_user
   end
 
   def show
-    # @book_new = Book.new
     @book = Book.find(params[:id])
     @post_comment = PostComment.new
-    # @post_comments = @book.post_comments.order(created_at: :desc)
-    #新着順で表示
   end
 
   def create
@@ -27,7 +29,6 @@ class BooksController < ApplicationController
       redirect_to book_path(@book), notice: 'Created book successfully.'
     else
       @books = Book.all
-      # @user = current_user
       render :index
     end
   end
