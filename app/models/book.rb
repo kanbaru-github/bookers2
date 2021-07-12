@@ -21,7 +21,8 @@ class Book < ApplicationRecord
     favorites.where(user_id: user.id).exists?
   end
   has_many :favorited_users, through: :favorites, source: :user
-  
+  # favorited_usersは、favoritesテーブルを通って、userモデルのデータ持ってくる
+  # 中間テーブルは多対多の関係を表現するためのテーブルのこと
 
   has_many :post_comments, dependent: :destroy
 

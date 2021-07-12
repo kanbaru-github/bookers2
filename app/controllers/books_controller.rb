@@ -6,10 +6,14 @@ class BooksController < ApplicationController
   # 正しいユーザーかを確かめるという意味
 
   def index
+    # 一週間分のレコードを取得
     to  = Time.current.at_end_of_day
     from  = (to - 6.day).at_beginning_of_day
     @books = Book.includes(:favorited_users).
+    # booksモデルからデータを取得するときに、favorited_usersモデルのデータもまとめて取得
       sort {|a,b|
+      # デフォルトは昇順
+      # ブロックに2つの要素を引数として与えて評価し、その結果で比較
         b.favorited_users.includes(:favorites).where(created_at: from...to).size <=>
         a.favorited_users.includes(:favorites).where(created_at: from...to).size
       }
