@@ -12,7 +12,7 @@ class BooksController < ApplicationController
     @books = Book.includes(:favorited_users).
     # booksモデルからデータを取得するときに、favorited_usersモデルのデータもまとめて取得
       sort {|a,b|
-      # デフォルトは昇順
+      # デフォルトは昇順 ↔︎ .rever
       # ブロックに2つの要素を引数として与えて評価し、その結果で比較
         b.favorited_users.includes(:favorites).where(created_at: from...to).size <=>
         a.favorited_users.includes(:favorites).where(created_at: from...to).size

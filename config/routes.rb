@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-
- # Railsのルーティングは、ルーティングファイルの上からの記載順に読み込まれる
+# Railsのルーティングは、ルーティングファイルの上からの記載順に読み込まれる
 
  devise_for :users
  # モデル名を指定すると認証に必要なルーティングを自動で設定してくれます。
@@ -31,5 +30,7 @@ Rails.application.routes.draw do
  end
 
  get '/search', to: 'searches#search'
+
+ resources :chats, only: [:show, :create]
 
 end

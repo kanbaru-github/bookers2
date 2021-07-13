@@ -62,4 +62,8 @@ class User < ApplicationRecord
     # nclude?は対象の配列に引数のものが含まれていればtrue、含まれていなければfalseを返します。
   end
 
+  has_many :user_rooms
+  has_many :chats
+  has_many :rooms, through: :user_rooms
+
 end
