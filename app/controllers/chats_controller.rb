@@ -1,12 +1,15 @@
 class ChatsController < ApplicationController
 
   before_action :follow_each_other, only: [:show]
+  # お互いにフォローしていなければshowアクションのみ使える
+  #follow_each_ortherメソッドはストロングパラメーターで定義済み
 
   def show
     @user = User.find(params[:id])
     # どのユーザーとチャットするかを取得
     rooms = current_user.user_rooms.pluck(:room_id)
     # pluckは、1つのモデルで使用されているテーブルからカラム (1つでも複数でも可) を取得するクエリを送信するのに使用
+    # current_userに紐付いているuser_roomsのmodelから:room_idの値の配列をroomsに代入するコードとなる。
     # カレントユーザーのuser_roomにあるroom_idの値の配列をroomsに代入
     user_rooms = UserRoom.find_by(user_id: @user.id, room_id: rooms)
     # user_roomモデルからuser_idがチャット相手のidが一致するものと、room_idが上記roomsのどれかに一致するレコードをuser_roomsに代入
@@ -38,6 +41,7 @@ class ChatsController < ApplicationController
   end
 
   def follow_each_other
+    # follow_each_otherメソッドの定義
     user = User.find(params[:id])
     unless current_user.following?(user) && user.following?(current_user)
       redirect_to books_path

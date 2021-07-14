@@ -66,4 +66,6 @@ class User < ApplicationRecord
   has_many :chats
   has_many :rooms, through: :user_rooms
 
+  has_many :view_counts, dependent: :destroy
+
 end
