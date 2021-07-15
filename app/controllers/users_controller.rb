@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   # ログイン認証されていなければ、ログイン画面へリダイレクトする
   before_action :ensure_correct_user, only: [:edit, :update]
+  # ストロングパラメーターで定義済み
 
   def index
     @users = User.all
