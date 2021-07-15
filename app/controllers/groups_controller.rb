@@ -1,5 +1,8 @@
 class GroupsController < ApplicationController
 
+  before_action :authenticate_user!
+  before_action :ensure_current_user, only: [:edit, :update]
+
   def index
     @book = Book.new
     @groups = Group.all
@@ -20,7 +23,7 @@ class GroupsController < ApplicationController
     if @group.save
       redirect_to groups_path
     else
-      render 'new'
+      render :new
     end
   end
 
@@ -31,9 +34,10 @@ class GroupsController < ApplicationController
     if @group.update(group_params)
       redirect_to groups_path
     else
-      render "edit"
+      render :edit
     end
   end
+
 
   private
 

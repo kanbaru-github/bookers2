@@ -23,7 +23,7 @@ class BooksController < ApplicationController
   def show
     @book = Book.find(params[:id])
     unless ViewCount.find_by(user_id: current_user.id, book_id: @book.id)
-      # ViewCountモデルの中にcurrent_user.idのuser_idと＠book.idのbook_idが見つからなかったら
+      # ViewCountモデルの中でuser_idが今ログインしてるユーザー、book_idが今見ている本がとして一致しなかったら このページを一度も見たことがなかったら
       current_user.view_counts.create(book_id: @book.id)
     end
     @post_comment = PostComment.new
