@@ -33,7 +33,8 @@ Rails.application.routes.draw do
 
  resources :chats, only: [:show, :create]
 
- resources :groups, except: [:destroy]
- # destroy以外全てのアクション
+ resources :groups do
+   get 'join', to: 'groups#join'
+ end
 
 end

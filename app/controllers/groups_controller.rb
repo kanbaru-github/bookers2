@@ -13,6 +13,14 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
   end
 
+  def join
+    @group = Group.find(params[:group_id])
+    @group.users << current_user
+    # @group.usersにcurrent_userを追加した配列
+    # 配列演算子:配列を結合したり、条件分岐する演算子
+    redirect_to groups_path
+  end
+
   def new
     @group = Group.new
   end
@@ -20,6 +28,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.owner_id = current_user.id
+    @group.users << current_user
     if @group.save
       redirect_to groups_path
     else
@@ -38,6 +47,13 @@ class GroupsController < ApplicationController
     end
   end
 
+  def destroy
+    @group = Group.find(params[:id])
+    @group.users.delete(current_user)
+    # 自分を削除
+    redirect_to groups_path
+  end
+
 
   private
 
@@ -45,7 +61,7 @@ class GroupsController < ApplicationController
     params.require(:group).permit(:name, :introduction, :image)
   end
 
-  def ensure_correct_user
+  def ensure_current_user
     @group = Group.find(params[:id])
     unless @group.owner_id == current_user.id
       redirect_to groups_path
