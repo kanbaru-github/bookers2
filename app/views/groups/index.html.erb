@@ -27,7 +27,7 @@
             <td><%= link_to group.name, group_path(group) %></td>
             <td><%= group.introduction %></td>
             <td>
-              <%= if group_owner_id == current_user.id %>
+              <% if group.owner_id == current_user.id %>
                 <%= link_to 'Edit', edit_group_path(group), class: 'btn btn-sm btn-success' %>
               <% end %>
             </td>
