@@ -60,9 +60,11 @@ class GroupsController < ApplicationController
   
   def send_mail
     @group = Group.find(params[:group_id])
+    # views/groups/new_mail.html.erbのform_withで入力された値を受け取る
     group_users = @group.users
     @title = params[:title]
     @content = params[:content]
+    # このの値をEventMailerのsend_mailアクションへ渡しています。
     EventMailer.send_mail(group_users, @title, @content).deliver
   end 
 

@@ -8,7 +8,7 @@
     </div>
     <div>
       [本文]<p class="font-weight-bold"><%= safe_join(@content.split("\n"),tag(:br)) %></p>
-      <!--フォームに入力したテキストを改行こみで表示する-->
+      <!--safe_joinがないと送信完了画面では改行がなくなる-->
     </div>
   </div>
 </div>

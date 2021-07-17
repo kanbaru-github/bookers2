@@ -35,6 +35,8 @@ Rails.application.routes.draw do
 
  resources :groups do
    get 'join', to: 'groups#join'
+   get 'new/mail', to: 'groups#new_mail'
+   get 'send/mail', to: 'groups#send_mail'
  end
 
 end
