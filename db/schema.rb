@@ -16,6 +16,15 @@ ActiveRecord::Schema.define(version: 2021_07_14_101601) do
     t.string "title"
     t.string "body"
     t.integer "user_id"
+    t.float "rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "room_id"
+    t.string "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -9,6 +9,29 @@
     <%= f.text_area :body, class: 'form-control book_body' %>
     <!--複数行のテキスト投稿フォーム-->
   </div>
+  <div class="form-group" id="star">
+    <%= f.label :rate %>
+    <%= f.hidden_field :rate, id: :review_star, class:'form-control' %>
+  </div>
+  <script>
+  $('#star').raty({
+    // body要素内のstarにアクセス
+    // .raty:ratyのプロバティ(属性)を使用することができる
+    size: 36,
+    // size	星のサイズ
+    starOff:  '<%= asset_path('star-off.png') %>',
+    // asset_path:asset/imageの画像を表示する
+    // starOff	オフ状態イメージのファイル名
+    starOn: '<%= asset_path('star-on.png') %>',
+    // starOn	オン状態イメージのファイル名
+    starHalf: '<%= asset_path('star-half.png') %>',
+    scoreName: 'book[rate]',
+    // scoreName	パラメータ名
+    half: true,
+    // half	星を半分単位で表示する
+  });
+  </script>
+
   <div class="form-group">
     <%= f.submit class: 'btn btn-success' %>
   </div>
