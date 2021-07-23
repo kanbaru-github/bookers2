@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_101601) do
     t.string "body"
     t.integer "user_id"
     t.float "rate"
+    # 有効桁数の大きくない小数
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
