@@ -16,8 +16,8 @@ class Book < ApplicationRecord
 
   has_many :favorites, dependent: :destroy
   def favorited_by?(user)
-    # このメソッドで、引数で渡されたユーザidがFavoritesテーブル内に存在（exists?）するかどうかを調べる
-    # 存在していればtrue、存在していなければfalseを返すようにしています。
+    # このメソッドで、引数で渡されたユーザーidがFavoritesテーブル内に存在（exists?）するかどうかを調べる
+    # 存在していればtrue、存在していなければfalseを返す
     favorites.where(user_id: user.id).exists?
   end
   has_many :favorited_users, through: :favorites, source: :user
