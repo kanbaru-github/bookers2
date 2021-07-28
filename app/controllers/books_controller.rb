@@ -6,7 +6,8 @@ class BooksController < ApplicationController
   # 正しいユーザーかを確かめるという意味
 
   def index
-    @books = Book.all
+    @books = Book.all.order(params[:sort])
+    # sort:並び替え
     @book = Book.new
     # @user = current_user
   end
