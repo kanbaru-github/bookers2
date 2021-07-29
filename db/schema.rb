@@ -17,15 +17,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_101601) do
     t.string "body"
     t.integer "user_id"
     t.float "rate"
-    # 有効桁数の大きくない小数
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "chats", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "room_id"
-    t.string "message"
+    t.string "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -48,7 +40,6 @@ ActiveRecord::Schema.define(version: 2021_07_14_101601) do
   create_table "group_users", force: :cascade do |t|
     t.integer "user_id"
     t.integer "group_id"
-    t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

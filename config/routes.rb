@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-# Railsのルーティングは、ルーティングファイルの上からの記載順に読み込まれる
+
+ # Railsのルーティングは、ルーティングファイルの上からの記載順に読み込まれる
 
  devise_for :users
  # モデル名を指定すると認証に必要なルーティングを自動で設定してくれます。
@@ -16,7 +17,6 @@ Rails.application.routes.draw do
   	get 'followings', to: 'relationships#followings', as: 'followings'
   	# 左側がURL 右側がcontroller#action
   	get 'followers', to:  'relationships#followers', as: 'followers'
-  	get 'search', to: 'users#search'
  end
 
  resources :books, only: [:create, :index, :show, :destroy, :edit, :update] do
@@ -29,14 +29,9 @@ Rails.application.routes.draw do
    get 'followers', to: 'relationships#followers', as: 'followers'
  end
 
- get '/search', to: 'searches#search'
+ # get '/search', to: 'searches#search'
 
- resources :chats, only: [:show, :create]
+ get '/search', to: 'homes#search'
 
- resources :groups do
-   get 'join', to: 'groups#join'
-   get 'new/mail', to: 'groups#new_mail'
-   get 'send/mail', to: 'groups#send_mail'
- end
 
 end
