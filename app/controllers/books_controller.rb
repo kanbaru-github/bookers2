@@ -13,7 +13,6 @@ class BooksController < ApplicationController
   end
 
   def show
-    # @book_new = Book.new
     @book = Book.find(params[:id])
     @post_comment = PostComment.new
     # @post_comments = @book.post_comments.order(created_at: :desc)
@@ -55,7 +54,7 @@ class BooksController < ApplicationController
   # このストロングパラメーターはここのclassでしか参照されない
 
   def book_params
-    params.require(:book).permit(:title, :body, :rate)
+    params.require(:book).permit(:title, :body, :rate, :category)
   end
 
   def ensure_correct_user
