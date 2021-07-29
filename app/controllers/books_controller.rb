@@ -6,6 +6,10 @@ class BooksController < ApplicationController
   # 正しいユーザーかを確かめるという意味
 
   def index
+
+    @books = Book.all.order(params[:sort])
+    # sort:並び替え
+
     # 一週間分のレコードを取得
     to  = Time.current.at_end_of_day
     from  = (to - 6.day).at_beginning_of_day
@@ -17,6 +21,7 @@ class BooksController < ApplicationController
         b.favorited_users.includes(:favorites).where(created_at: from...to).size <=>
         a.favorited_users.includes(:favorites).where(created_at: from...to).size
       }
+
     @book = Book.new
   end
 
@@ -63,7 +68,7 @@ class BooksController < ApplicationController
   # このストロングパラメーターはここのclassでしか参照されない
 
   def book_params
-    params.require(:book).permit(:title, :body, :rate)
+    params.require(:book).permit(:title, :body, :rate, :category)
   end
 
   def ensure_correct_user
