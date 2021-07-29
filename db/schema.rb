@@ -17,7 +17,27 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
     t.string "body"
     t.integer "user_id"
     t.float "rate"
+
     t.string "category"
+
+    # 有効桁数の大きくない小数
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "room_id"
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "room_id"
+    t.string "message"
+
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

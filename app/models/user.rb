@@ -17,7 +17,8 @@ class User < ApplicationRecord
 
   has_many :books, dependent: :destroy
 
-  attachment :profile_image
+  attachment :profile_image, destroy: false
+  # userモデルが消えてもrefileに残る
 
   validates :name, presence: true, uniqueness:true, length: { minimum: 2, maximum: 20 }
   validates :introduction, length: { maximum: 50 }
@@ -45,6 +46,7 @@ class User < ApplicationRecord
   # Userモデルにメソッドを記述
    # ユーザーをフォローする
   def follow(user_id)
+    # user_idは動作する際に一時的に作られる為schemaにはない
     relationships.create(followed_id: user_id)
   end
 
@@ -59,5 +61,14 @@ class User < ApplicationRecord
     followings.include?(user)
     # nclude?は対象の配列に引数のものが含まれていればtrue、含まれていなければfalseを返します。
   end
+
+  has_many :user_rooms
+  has_many :chats
+  has_many :rooms, through: :user_rooms
+
+  has_many :view_counts, dependent: :destroy
+
+  has_many :group_users
+  has_many :groups, through: :group_users
 
 end

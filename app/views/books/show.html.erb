@@ -7,6 +7,7 @@
       <%= render 'form', book: Book.new %>
     </div>
     <div class='col-md-8 offset-md-1'>
+      <!--offset:余白-->
   		<h2>Book detail</h2>
   		<table class='table'>
   		  <tr id="book_<%= @book.id %>">
@@ -46,7 +47,7 @@
       <%= form_with model:[@book,@post_comment] do |f| %>
       <!--コメントは、bookに結びついたpost_commentにあるため、2つ用意する必要があります。-->
       <!--post_commentをcreateするためのリクエストは、ルーティングもネスト（親子関係）しているため、上記2つの情報が必要になります。-->
-        <%= f.text_area :comment, size: "90x5" %>
+        <%= f.text_area :comment, size:"90x5" %>
         <%= f.submit '送信'%>
       <% end %>
     </div>

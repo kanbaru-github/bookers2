@@ -6,17 +6,32 @@ class BooksController < ApplicationController
   # 正しいユーザーかを確かめるという意味
 
   def index
+
     @books = Book.all.order(params[:sort])
     # sort:並び替え
+
+    # 一週間分のレコードを取得
+    to  = Time.current.at_end_of_day
+    from  = (to - 6.day).at_beginning_of_day
+    @books = Book.includes(:favorited_users).
+    # booksモデルからデータを取得するときに、favorited_usersモデルのデータもまとめて取得
+      sort {|a,b|
+      # デフォルトは昇順 ↔︎ .rever
+      # ブロックに2つの要素を引数として与えて評価し、その結果で比較
+        b.favorited_users.includes(:favorites).where(created_at: from...to).size <=>
+        a.favorited_users.includes(:favorites).where(created_at: from...to).size
+      }
+
     @book = Book.new
-    # @user = current_user
   end
 
   def show
     @book = Book.find(params[:id])
+    unless ViewCount.find_by(user_id: current_user.id, book_id: @book.id)
+      # ViewCountモデルの中でuser_idが今ログインしてるユーザー、book_idが今見ている本がとして一致しなかったら このページを一度も見たことがなかったら
+      current_user.view_counts.create(book_id: @book.id)
+    end
     @post_comment = PostComment.new
-    # @post_comments = @book.post_comments.order(created_at: :desc)
-    #新着順で表示
   end
 
   def create
@@ -27,7 +42,6 @@ class BooksController < ApplicationController
       redirect_to book_path(@book), notice: 'Created book successfully.'
     else
       @books = Book.all
-      # @user = current_user
       render :index
     end
   end

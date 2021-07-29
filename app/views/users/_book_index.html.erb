@@ -1,0 +1,171 @@
+<table class='table table-hover table-inverse'>
+  <!--table-hover:カーソルを合わせると色が変わる-->
+  <thead>
+    <tr>
+      <th></th>
+      <th>Title</th>
+      <th>Opinion</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% books.each do |book| %>
+      <tr id="book_<%= book.id %>">
+        <td><%= link_to user_path(book.user) do %>
+          <%= attachment_image_tag(book.user, :profile_image, :fill, 40, 40, fallback: "no_image.jpg") %>
+          <% end %>
+        </td>
+        <td><%= link_to book.title, book_path(book) %></td>
+        <td><%= book.body %></td>
+        <td class="favorite-btn"><%= render "favorites/favorite-btn", book: book %></td>
+        <td class="comments-count">コメント数: <%= book.post_comments.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<h3>投稿数の前日比・前週比</h3>
+  <div class="table_width">
+    <table class='table table-bordered'>
+      <thead>
+        <tr>
+          <th>今日の投稿数</th>
+          <th>前日の投稿数</th>
+          <th>前日比</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%=  @today_book.count %></td>
+          <td><%= @yesterday_book.count %></td>
+          <td>
+            <% if @yesterday_book.count == 0 %>
+              前日の投稿が0のため計算できません
+            <% else %>
+              <% @the_day_before =   @today_book.count / @yesterday_book.count.to_f  %>
+              <%= (@the_day_before * 100).round %>%
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table_width">
+    <table class='table table-bordered'>
+      <thead>
+        <tr>
+          <th>今週の投稿数</th>
+          <th>前週の投稿数</th>
+          <th>前週比</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= @this_week_book.count %></td>
+          <td><%= @last_week_book.count %></td>
+          <td>
+            <% if @last_week_book.count == 0 %>
+              前週の投稿が0のため計算できません
+            <% else %>
+              <% @the_week_before = @this_week_book.count / @last_week_book.count.to_f  %>
+              <%= (@the_week_before * 100).round %>%
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>7日間分の投稿数</h4>
+  <table class='table table-bordered'>
+    <!--テーブルの各セルにボーダーをつける-->
+    <thead>
+      <tr>
+        <th>６日前</th>
+        <th>５日前</th>
+        <th>４日前</th>
+        <th>３日前</th>
+        <th>２日前</th>
+        <th>１日前</th>
+        <th>今日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @books.created_6day_ago.count %></td>
+        <td><%= @books.created_5day_ago.count %></td>
+        <td><%= @books.created_4day_ago.count %></td>
+        <td><%= @books.created_3day_ago.count %></td>
+        <td><%= @books.created_2day_ago.count %></td>
+        <td><%= @books.created_yesterday.count %></td>
+        <td><%= @books.created_today.count %></td>
+      </tr>
+    </tbody>
+  </table>
+  <canvas id="myLineChart"></canvas>
+  <!--canvas要素は、グラフィックなどが描写可能なビットマップキャンバスを提供-->
+  <script>
+    $(document).on('turbolinks:load', function() {
+      // Ajaxによるページ遷移の高速化のためのライブラリ
+      // ページの読み込み時	window.onLoadの代替として利用
+      var ctx = document.getElementById("myLineChart");
+      // canvas要素（id = myLineChart） を取得し、変数 ctx に入力
+      var myLineChart = new Chart(ctx, {
+        // 描画するグラフを、new Chart()によって設定
+        type: 'line',
+        // 描画するグラフの種類
+        data: {
+          labels: ['6日前', '5日前', '4日前', '3日前', '2日前', '1日前', '今日'],
+          datasets: [
+            {
+              label: '投稿した本の数',
+              data: [<%= @books.created_6day_ago.count %>, <%= @books.created_5day_ago.count %>, <%= @books.created_4day_ago.count %>, <%= @books.created_3day_ago.count %>, <%= @books.created_2day_ago.count %>, <%= @books.created_yesterday.count %>, <%= @books.created_today.count %>],
+              borderColor: "rgba(0,0,255,1)",
+              // 折れ線グラフの線の色
+              backgroundColor: "rgba(0,0,0,0)"
+              // 線の下の塗りつぶしの色
+            }
+          ],
+        },
+        options: {
+          title: {
+            display: true,
+            // タイトル表示の可否
+            text: '7日間の投稿数の比較'
+          },
+          scales: {
+            // グラフ軸の詳細（最大値・最小値・刻み幅など）
+            yAxes: [{
+              // y軸の設定
+              ticks: {
+                // 項目を設定
+                suggestedMax: 10,
+                // 軸の最大値
+                suggestedMin: 0,
+                // 軸の最大値
+                stepSize: 1,
+                // 軸の刻み幅
+                callback: function(value, index, values){
+                  // 軸のラベル
+                  return  value
+                  // 戻り値(プログラムや関数からの返却値)
+                }
+              }
+            }]
+          },
+        }
+      });
+    });
+  </script>
+
+<%= form_with url: user_search_path(@user), method: :get do |f| %>
+  <%= f.date_field :created_at %>
+  <!--年、月、日等のテキストフィールドが１つにまとまっており、カレンダー入力ができるようになっている-->
+  <!--:created_at:作成日時を記録するカラム-->
+  <%= f.submit '検索', class: 'btn btn-primary'  %>
+<% end %>
+<div id="search_result">
+  <% if @search_book.present? %>
+  <!--存在する場合-->
+    <%= render 'search', search_book: @search_book %>
+  <% end %>
+</div>

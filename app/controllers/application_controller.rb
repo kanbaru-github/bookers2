@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   # deviseで利用出来るパラメーターを設定しますよ。という意味
   # deviceとは認証系アプリに必要な機能を簡単に追加できる便利なgem
   # :devise_contoller?とはdeviseを生成した際にできるヘルパーメソッドの一つで、deviseにまつわる画面に行った時に、という意味
-  
   protected
   # Application Controllerを継承してるControllerも参照できる
 

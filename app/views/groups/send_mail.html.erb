@@ -1,0 +1,14 @@
+<div class "">
+  <h3 class="margin_top text-center">送信が完了しました</h3>
+  <div class="margin_width">
+    <div class="margin_top">内容は以下の通りです。</div>
+    <div class="small_margin_top">
+      [タイトル]<p class="font-weight-bold"><%= @title %></p>
+      <!--font-weight-bold:文字が太くなる-->
+    </div>
+    <div>
+      [本文]<p class="font-weight-bold"><%= safe_join(@content.split("\n"),tag(:br)) %></p>
+      <!--safe_joinがないと送信完了画面では改行がなくなる-->
+    </div>
+  </div>
+</div>
