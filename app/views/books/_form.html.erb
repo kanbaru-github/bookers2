@@ -9,6 +9,10 @@
     <%= f.text_area :body, class: 'form-control book_body' %>
     <!--複数行のテキスト投稿フォーム-->
   </div>
+  <div class="form-group">
+    <%= f.label :category %>
+    <%= f.text_field :category, class: 'form-control' %>
+  </div>
   <div class="form-group" id="star">
     <%= f.label :rate %>
     <%= f.hidden_field :rate, id: :review_star, class:'form-control' %>

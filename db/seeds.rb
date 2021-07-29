@@ -18,5 +18,5 @@ Book.create!(
   body: 'test',
   user_id: '1',
   rate: '3.5',
-  
+  category: 'test'
   )
