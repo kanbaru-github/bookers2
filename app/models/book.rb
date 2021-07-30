@@ -23,6 +23,8 @@ class Book < ApplicationRecord
 
   has_many :post_comments, dependent: :destroy
 
+  has_many :favorited_users, through: :favorites, source: :user
+
   validates :title, presence: true
   validates :body, presence: true, length: { maximum: 200 }
   # lengthとは属性の値の長さを検証しています。今回は文字数
