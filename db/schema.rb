@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
     t.string "body"
     t.integer "user_id"
     t.float "rate"
+    # 有効桁数の大きくない小数
     t.string "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -26,7 +27,6 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
     t.integer "user_id"
     t.integer "room_id"
     t.string "message"
-
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
   create_table "favorites", force: :cascade do |t|
     t.integer "user_id"
     t.integer "book_id"
+    t.integer "room_id"
+    t.string "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

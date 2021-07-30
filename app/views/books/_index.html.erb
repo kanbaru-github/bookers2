@@ -21,9 +21,8 @@
         <td><%= link_to book.category, search_path(keyword: book.category) %></td>
         <td class="favorite-btn"><%= render "favorites/favorite-btn", book: book %></td>
         <td class="comments-count">コメント数: <%= book.post_comments.count %></td>
-
         <td class="view-count">閲覧数: <%= book.view_counts.count %></td>
-
+        <!--各投稿へアクセスした数を集計-->
         <td>
           <div id="rate_<%= book.id %>"></div>
           <script>
@@ -39,7 +38,6 @@
             })
           </script>
         </td>
-
       </tr>
     <% end %>
   </tbody>
