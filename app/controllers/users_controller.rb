@@ -14,8 +14,24 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @books = @user.books
-    @book = Book.new
     # モデル名.where(カラム名: 条件) (例)@books = Book.where(user_id: @user.id)でも可能
+    @book = Book.new
+    @today_book =  @books.created_today
+    @yesterday_book = @books.created_yesterday
+    @this_week_book = @books.created_this_week
+    @last_week_book = @books.created_last_week
+  end
+
+  def search
+    @user = User.find(params[:user_id])
+    @books = @user.books
+    @book = Book.new
+    if params[:created_at] == ""
+      @search_book = "日付を選択してください"
+    else
+      create_at = params[:created_at]
+      @search_book = @books.where(['created_at LIKE ? ', "#{create_at}%"]).count
+    end
   end
 
   def edit

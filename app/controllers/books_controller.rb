@@ -6,7 +6,6 @@ class BooksController < ApplicationController
   # 正しいユーザーかを確かめるという意味
 
   def index
-
     # 一週間分のレコードを取得
     to  = Time.current.at_end_of_day
     from  = (to - 6.day).at_beginning_of_day
