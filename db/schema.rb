@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_03_101633) do
+ActiveRecord::Schema.define(version: 2021_07_14_101601) do
 
   create_table "books", force: :cascade do |t|
     t.string "title"
     t.string "body"
     t.integer "user_id"
     t.float "rate"
-    # 有効桁数の大きくない小数
     t.string "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -34,8 +33,6 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
   create_table "favorites", force: :cascade do |t|
     t.integer "user_id"
     t.integer "book_id"
-    t.integer "room_id"
-    t.string "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -56,7 +53,6 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
     t.datetime "updated_at", null: false
   end
 
-
   create_table "post_comments", force: :cascade do |t|
     t.text "comment"
     t.integer "user_id"
@@ -68,6 +64,18 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
   create_table "relationships", force: :cascade do |t|
     t.integer "follower_id"
     t.integer "followed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_rooms", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "room_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -85,6 +93,13 @@ ActiveRecord::Schema.define(version: 2021_07_03_101633) do
     t.string "profile_image_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "view_counts", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "book_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
